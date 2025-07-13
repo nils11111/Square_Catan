@@ -37,10 +37,14 @@ public class GameBoardView extends GridPane {
         setVgap(2);
         setPadding(new Insets(10));
         
-        // Create a larger grid to accommodate vertices and edges
-        // Each tile is 2x2 grid cells, with vertices at intersections
-        for (int row = 0; row < gameBoard.getRows() * 2; row++) {
-            for (int col = 0; col < gameBoard.getCols() * 2; col++) {
+        // Create a grid to accommodate all vertices and edges
+        // We need (rows+1) * 2 for vertices and edges vertically
+        // We need (cols+1) * 2 for vertices and edges horizontally
+        int gridRows = (gameBoard.getRows() + 1) * 2;
+        int gridCols = (gameBoard.getCols() + 1) * 2;
+        
+        for (int row = 0; row < gridRows; row++) {
+            for (int col = 0; col < gridCols; col++) {
                 if (row % 2 == 0 && col % 2 == 0) {
                     // Vertex position
                     int vertexRow = row / 2;
@@ -91,8 +95,9 @@ public class GameBoardView extends GridPane {
         addLegendItem(legend, "Weide", Color.LIGHTGREEN, "Wolle");
         addLegendItem(legend, "Wüste", Color.SANDYBROWN, "Keine Ressource");
         
-        // Add to the right side of the board
-        add(legend, gameBoard.getCols() * 2, 0, 1, gameBoard.getRows() * 2);
+        // Add to the right side of the board - account for new grid size
+        int gridCols = (gameBoard.getCols() + 1) * 2;
+        add(legend, gridCols, 0, 1, (gameBoard.getRows() + 1) * 2);
     }
     
     private void addLegendItem(VBox legend, String terrainName, Color color, String resource) {
@@ -362,7 +367,7 @@ public class GameBoardView extends GridPane {
             
             if (gameState.getCurrentPhase() == GameState.GamePhase.SETUP) {
                 // In setup phase, allow building without resource costs
-                if (edge != null && edge.canBuildRoad(currentPlayer)) {
+                if (edge != null && edge.canBuildRoad(currentPlayer, true)) { // Allow without connection in setup
                     boolean success = isHorizontal ? 
                         gameState.buildRoadAtHorizontalEdge(row, col, currentPlayer) :
                         gameState.buildRoadAtVerticalEdge(row, col, currentPlayer);
@@ -376,7 +381,7 @@ public class GameBoardView extends GridPane {
                 }
             } else if (gameState.getCurrentPhase() == GameState.GamePhase.PLAY) {
                 // In play phase, check resource costs
-                if (edge != null && edge.canBuildRoad(currentPlayer)) {
+                if (edge != null && edge.canBuildRoad(currentPlayer, false)) { // Require connection in play phase
                     boolean success = isHorizontal ? 
                         gameState.buildRoadAtHorizontalEdge(row, col, currentPlayer) :
                         gameState.buildRoadAtVerticalEdge(row, col, currentPlayer);

@@ -69,6 +69,7 @@ public class GameBoard {
         for (int row = 0; row <= rows; row++) {
             for (int col = 0; col < cols; col++) {
                 horizontalEdges[row][col] = new Edge(row, col, true);
+                horizontalEdges[row][col].setGameBoard(this);
             }
         }
 
@@ -76,6 +77,7 @@ public class GameBoard {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col <= cols; col++) {
                 verticalEdges[row][col] = new Edge(row, col, false);
+                verticalEdges[row][col].setGameBoard(this);
             }
         }
     }
@@ -192,6 +194,162 @@ public class GameBoard {
         if (right != null) adjacent.add(right);
         
         return adjacent;
+    }
+
+    /**
+     * Get the two vertices connected by a horizontal edge.
+     */
+    public List<Vertex> getVerticesForHorizontalEdge(int edgeRow, int edgeCol) {
+        List<Vertex> vertices = new ArrayList<>();
+        Vertex left = getVertex(edgeRow, edgeCol);
+        Vertex right = getVertex(edgeRow, edgeCol + 1);
+        
+        if (left != null) vertices.add(left);
+        if (right != null) vertices.add(right);
+        
+        return vertices;
+    }
+
+    /**
+     * Get the two vertices connected by a vertical edge.
+     */
+    public List<Vertex> getVerticesForVerticalEdge(int edgeRow, int edgeCol) {
+        List<Vertex> vertices = new ArrayList<>();
+        Vertex top = getVertex(edgeRow, edgeCol);
+        Vertex bottom = getVertex(edgeRow + 1, edgeCol);
+        
+        if (top != null) vertices.add(top);
+        if (bottom != null) vertices.add(bottom);
+        
+        return vertices;
+    }
+
+    /**
+     * Check if a road can be built at the specified edge by connecting to existing buildings.
+     */
+    public boolean canBuildRoadAtEdge(int edgeRow, int edgeCol, boolean isHorizontal, Player player) {
+        return canBuildRoadAtEdge(edgeRow, edgeCol, isHorizontal, player, false);
+    }
+
+    /**
+     * Check if a road can be built at the specified edge by connecting to existing buildings.
+     * @param allowWithoutConnection If true, allows building roads without building connections (for setup phase)
+     */
+    public boolean canBuildRoadAtEdge(int edgeRow, int edgeCol, boolean isHorizontal, Player player, boolean allowWithoutConnection) {
+        Edge edge = isHorizontal ? getHorizontalEdge(edgeRow, edgeCol) : getVerticalEdge(edgeRow, edgeCol);
+        if (edge == null || edge.isOccupied() || player.getRoads() <= 0) {
+            return false;
+        }
+
+        // Get connected vertices
+        List<Vertex> connectedVertices = isHorizontal ? 
+            getVerticesForHorizontalEdge(edgeRow, edgeCol) : 
+            getVerticesForVerticalEdge(edgeRow, edgeCol);
+
+        // Check if at least one connected vertex has a building owned by the player
+        for (Vertex vertex : connectedVertices) {
+            if (vertex != null && vertex.isOccupied() && vertex.getOwner() == player) {
+                return true;
+            }
+        }
+
+        // If setup phase allows building without connections, return true
+        if (allowWithoutConnection) {
+            return true;
+        }
+
+        // Check if there's a road network connection (for play phase)
+        return hasRoadNetworkConnection(edgeRow, edgeCol, isHorizontal, player);
+    }
+
+    /**
+     * Check if there's a road network connection to this edge.
+     */
+    private boolean hasRoadNetworkConnection(int edgeRow, int edgeCol, boolean isHorizontal, Player player) {
+        // Get connected vertices
+        List<Vertex> connectedVertices = isHorizontal ? 
+            getVerticesForHorizontalEdge(edgeRow, edgeCol) : 
+            getVerticesForVerticalEdge(edgeRow, edgeCol);
+
+        // Check if any connected vertex has a road network
+        for (Vertex vertex : connectedVertices) {
+            if (vertex != null && hasRoadNetworkToVertex(vertex, player, new HashSet<>())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Recursively check if there's a road network path to a vertex.
+     */
+    private boolean hasRoadNetworkToVertex(Vertex targetVertex, Player player, Set<String> visited) {
+        String vertexKey = targetVertex.getRow() + "," + targetVertex.getCol();
+        if (visited.contains(vertexKey)) {
+            return false;
+        }
+        visited.add(vertexKey);
+
+        // Check if this vertex has a building owned by the player
+        if (targetVertex.isOccupied() && targetVertex.getOwner() == player) {
+            return true;
+        }
+
+        // Check all edges connected to this vertex
+        int row = targetVertex.getRow();
+        int col = targetVertex.getCol();
+
+        // Check horizontal edges
+        Edge leftEdge = getHorizontalEdge(row, col - 1);
+        Edge rightEdge = getHorizontalEdge(row, col);
+        
+        // Check vertical edges
+        Edge topEdge = getVerticalEdge(row - 1, col);
+        Edge bottomEdge = getVerticalEdge(row, col);
+
+        // Check if any of these edges have roads owned by the player
+        if ((leftEdge != null && leftEdge.isOccupied() && leftEdge.getOwner() == player) ||
+            (rightEdge != null && rightEdge.isOccupied() && rightEdge.getOwner() == player) ||
+            (topEdge != null && topEdge.isOccupied() && topEdge.getOwner() == player) ||
+            (bottomEdge != null && bottomEdge.isOccupied() && bottomEdge.getOwner() == player)) {
+            
+            // Follow the road network
+            if (leftEdge != null && leftEdge.isOccupied() && leftEdge.getOwner() == player) {
+                List<Vertex> leftVertices = getVerticesForHorizontalEdge(row, col - 1);
+                for (Vertex v : leftVertices) {
+                    if (v != targetVertex && hasRoadNetworkToVertex(v, player, visited)) {
+                        return true;
+                    }
+                }
+            }
+            if (rightEdge != null && rightEdge.isOccupied() && rightEdge.getOwner() == player) {
+                List<Vertex> rightVertices = getVerticesForHorizontalEdge(row, col);
+                for (Vertex v : rightVertices) {
+                    if (v != targetVertex && hasRoadNetworkToVertex(v, player, visited)) {
+                        return true;
+                    }
+                }
+            }
+            if (topEdge != null && topEdge.isOccupied() && topEdge.getOwner() == player) {
+                List<Vertex> topVertices = getVerticesForVerticalEdge(row - 1, col);
+                for (Vertex v : topVertices) {
+                    if (v != targetVertex && hasRoadNetworkToVertex(v, player, visited)) {
+                        return true;
+                    }
+                }
+            }
+            if (bottomEdge != null && bottomEdge.isOccupied() && bottomEdge.getOwner() == player) {
+                List<Vertex> bottomVertices = getVerticesForVerticalEdge(row, col);
+                for (Vertex v : bottomVertices) {
+                    if (v != targetVertex && hasRoadNetworkToVertex(v, player, visited)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     public void produceResources(int diceRoll) {

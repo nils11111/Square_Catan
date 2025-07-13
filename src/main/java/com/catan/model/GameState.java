@@ -264,7 +264,7 @@ public class GameState {
             }
             
             Edge edge = gameBoard.getHorizontalEdge(edgeRow, edgeCol);
-            if (edge != null && edge.canBuildRoad(player)) {
+            if (edge != null && edge.canBuildRoad(player, true)) { // Allow without connection in setup
                 if (edge.buildRoad(player)) {
                     roadBuilt = true;
                     // Both settlement and road built, move to next player
@@ -276,7 +276,7 @@ public class GameState {
         } else {
             // In play phase, check resource costs
             Edge edge = gameBoard.getHorizontalEdge(edgeRow, edgeCol);
-            if (edge != null && edge.canBuildRoad(player)) {
+            if (edge != null && edge.canBuildRoad(player, false)) { // Require connection in play phase
                 if (BuildingCosts.canAfford(player, BuildingCosts.BuildingType.ROAD)) {
                     if (BuildingCosts.payCost(player, BuildingCosts.BuildingType.ROAD)) {
                         return edge.buildRoad(player);
@@ -302,7 +302,7 @@ public class GameState {
             }
             
             Edge edge = gameBoard.getVerticalEdge(edgeRow, edgeCol);
-            if (edge != null && edge.canBuildRoad(player)) {
+            if (edge != null && edge.canBuildRoad(player, true)) { // Allow without connection in setup
                 if (edge.buildRoad(player)) {
                     roadBuilt = true;
                     // Both settlement and road built, move to next player
@@ -314,7 +314,7 @@ public class GameState {
         } else {
             // In play phase, check resource costs
             Edge edge = gameBoard.getVerticalEdge(edgeRow, edgeCol);
-            if (edge != null && edge.canBuildRoad(player)) {
+            if (edge != null && edge.canBuildRoad(player, false)) { // Require connection in play phase
                 if (BuildingCosts.canAfford(player, BuildingCosts.BuildingType.ROAD)) {
                     if (BuildingCosts.payCost(player, BuildingCosts.BuildingType.ROAD)) {
                         return edge.buildRoad(player);
