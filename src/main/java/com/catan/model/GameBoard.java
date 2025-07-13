@@ -21,8 +21,8 @@ public class GameBoard {
     private static final int EMPTY_COL = 2;
 
     public GameBoard() {
-        this.rows = 4;
-        this.cols = 5;
+        this.rows = 6;
+        this.cols = 6;
         this.tiles = new Tile[rows][cols];
         this.vertices = new Vertex[rows + 1][cols + 1]; // +1 for corners
         this.horizontalEdges = new Edge[rows + 1][cols]; // horizontal edges between tiles

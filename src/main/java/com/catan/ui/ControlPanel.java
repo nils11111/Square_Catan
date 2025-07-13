@@ -330,6 +330,12 @@ public class ControlPanel extends VBox {
         getBox.getItems().addAll(ResourceType.values());
         getBox.getSelectionModel().selectFirst();
 
+        // Mengen-Spinners
+        Spinner<Integer> giveAmount = new Spinner<>(1, 99, 1);
+        Spinner<Integer> getAmount = new Spinner<>(1, 99, 1);
+        giveAmount.setEditable(true);
+        getAmount.setEditable(true);
+
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -338,8 +344,10 @@ public class ControlPanel extends VBox {
         grid.add(playerBox, 1, 0);
         grid.add(new Label("Ich gebe:"), 0, 1);
         grid.add(giveBox, 1, 1);
+        grid.add(giveAmount, 2, 1);
         grid.add(new Label("Ich bekomme:"), 0, 2);
         grid.add(getBox, 1, 2);
+        grid.add(getAmount, 2, 2);
 
         dialog.getDialogPane().setContent(grid);
         ButtonType offerButtonType = new ButtonType("Handel anbieten", ButtonBar.ButtonData.OK_DONE);
@@ -350,15 +358,17 @@ public class ControlPanel extends VBox {
                 Player partner = playerBox.getValue();
                 ResourceType give = giveBox.getValue();
                 ResourceType get = getBox.getValue();
+                int giveQty = giveAmount.getValue();
+                int getQty = getAmount.getValue();
                 if (partner == null || give == null || get == null) {
                     showError("Ungültige Auswahl", "Bitte wähle alles aus.");
                     return null;
                 }
-                if (currentPlayer.getResourceCount(give) < 1) {
+                if (currentPlayer.getResourceCount(give) < giveQty) {
                     showError("Nicht genug Ressourcen", "Du hast nicht genug von dieser Ressource.");
                     return null;
                 }
-                if (partner.getResourceCount(get) < 1) {
+                if (partner.getResourceCount(get) < getQty) {
                     showError("Nicht genug Ressourcen", "Der Handelspartner hat nicht genug von der gewünschten Ressource.");
                     return null;
                 }
@@ -367,13 +377,18 @@ public class ControlPanel extends VBox {
                 confirm.setTitle("Handelsangebot");
                 confirm.setHeaderText(partner.getName() + ", möchtest du diesen Handel annehmen?");
                 confirm.setContentText(
-                    currentPlayer.getName() + " bietet: " + give.getGermanName() +
-                    " gegen " + get.getGermanName()
+                    currentPlayer.getName() + " bietet: " + giveQty + "x " + give.getGermanName() +
+                    " gegen " + getQty + "x " + get.getGermanName()
                 );
                 java.util.Optional<ButtonType> result = confirm.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
-                    // Handel durchführen
-                    gameState.tradeResources(currentPlayer, partner, give, get);
+                    // Handel durchführen (mehrfache Übergabe)
+                    for (int i = 0; i < giveQty; i++) {
+                        gameState.tradeResources(currentPlayer, partner, give, get);
+                    }
+                    for (int i = 1; i < getQty; i++) {
+                        gameState.tradeResources(currentPlayer, partner, give, get);
+                    }
                     showInfo("Handel erfolgreich", "Der Handel wurde durchgeführt.");
                     updateDisplay();
                     notifyAction();

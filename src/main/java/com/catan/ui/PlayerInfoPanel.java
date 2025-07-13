@@ -107,8 +107,7 @@ public class PlayerInfoPanel extends VBox {
             for (int j = 0; j < ResourceType.values().length; j++) {
                 ResourceType resource = ResourceType.values()[j];
                 int count = player.getResourceCount(resource);
-                resourceLabels[i][j].setText(resource.getEmoji() + " " + 
-                                           resource.getGermanName() + ": " + count);
+                resourceLabels[i][j].setText(resource.getGermanName() + ": " + count);
             }
 
             // Update buildings label

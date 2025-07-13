@@ -104,16 +104,23 @@ public class GameWindow extends BorderPane {
     }
 
     private void showGameOverDialog() {
+        // Siegeranimation: großes, farbiges Fenster mit Glückwunsch
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Spielende");
-        alert.setHeaderText("Das Spiel ist beendet!");
+        alert.setTitle("🎉 Spielende - Wir haben einen Sieger! 🎉");
+        alert.setHeaderText("Herzlichen Glückwunsch!");
         alert.setContentText(gameState.getWinner().getName() + " hat gewonnen mit " + 
-                           gameState.getWinner().getVictoryPoints() + " Siegpunkten!");
-        
+                           gameState.getWinner().getVictoryPoints() + " Siegpunkten!\n\n🎊🎊🎊");
+        // Animation: Farbenwechsel (einfach, da JavaFX Alert limitiert)
+        DialogPane pane = alert.getDialogPane();
+        pane.setStyle("-fx-background-color: linear-gradient(to bottom, #fff700, #ff7f00, #ff007f, #7f00ff, #007fff, #00ff7f);" +
+                      "-fx-font-size: 20px; -fx-font-weight: bold;");
+        // Konfetti-Emoji als Deko
+        Label confetti = new Label("🎉🎊🎉");
+        confetti.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 48));
+        pane.setGraphic(confetti);
         ButtonType newGameButton = new ButtonType("Neues Spiel");
         ButtonType exitButton = new ButtonType("Beenden");
         alert.getButtonTypes().setAll(newGameButton, exitButton);
-        
         alert.showAndWait().ifPresent(response -> {
             if (response == newGameButton) {
                 // TODO: Implement new game functionality
