@@ -16,7 +16,7 @@ public class Main extends Application {
         GameWindow gameWindow = new GameWindow();
         Scene scene = new Scene(gameWindow, 1200, 800);
         
-        primaryStage.setTitle("Square Catan - Die Siedler von Catan");
+        primaryStage.setTitle("Square Catan - The Settlers of Catan");
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(1000);
         primaryStage.setMinHeight(700);

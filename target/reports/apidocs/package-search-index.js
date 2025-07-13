@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.catan"},{"l":"com.catan.model"},{"l":"com.catan.ui"}];updateSearchResults();

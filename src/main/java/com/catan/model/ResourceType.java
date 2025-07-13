@@ -5,22 +5,22 @@ package com.catan.model;
  * Based on the original 1995 game rules.
  */
 public enum ResourceType {
-    WOOD("Holz", "🌲"),
-    BRICK("Lehm", "🧱"),
-    ORE("Erz", "⛏️"),
-    GRAIN("Getreide", "🌾"),
-    WOOL("Wolle", "🐑");
+    WOOD("Wood", "🌲"),
+    BRICK("Brick", "🧱"),
+    ORE("Ore", "⛏️"),
+    GRAIN("Grain", "🌾"),
+    WOOL("Wool", "🐑");
 
-    private final String germanName;
+    private final String displayName;
     private final String emoji;
 
-    ResourceType(String germanName, String emoji) {
-        this.germanName = germanName;
+    ResourceType(String displayName, String emoji) {
+        this.displayName = displayName;
         this.emoji = emoji;
     }
 
-    public String getGermanName() {
-        return germanName;
+    public String getDisplayName() {
+        return displayName;
     }
 
     public String getEmoji() {
@@ -29,6 +29,6 @@ public enum ResourceType {
 
     @Override
     public String toString() {
-        return germanName;
+        return displayName;
     }
 } 

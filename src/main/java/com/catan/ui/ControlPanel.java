@@ -20,7 +20,7 @@ public class ControlPanel extends VBox {
 
     public ControlPanel(GameState gameState) {
         this.gameState = gameState;
-        this.diceLabel = new Label("Würfel: -");
+        this.diceLabel = new Label("Dice: -");
         this.currentPlayerLabel = new Label();
         
         setupPanel();
@@ -33,7 +33,7 @@ public class ControlPanel extends VBox {
         setStyle("-fx-background-color: #e8e8e8; -fx-border-color: #ccc;");
 
         // Title
-        Label titleLabel = new Label("Spielsteuerung");
+        Label titleLabel = new Label("Game Controls");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         getChildren().add(titleLabel);
 
@@ -59,18 +59,18 @@ public class ControlPanel extends VBox {
             getChildren().add(playSection);
         }
 
-        // Anleitung unten einfügen
-        Label anleitung = new Label(
-            "Anleitung:\n" +
-            "Um etwas zu bauen, klicke auf:\n" +
-            "- eine Kreuzung (Kreis) für Siedlung/Stadt\n" +
-            "- eine Straße (dicke Linie) für Straße\n" +
-            "Ressourcen werden automatisch geprüft."
+        // Instructions at the bottom
+        Label instructions = new Label(
+            "Instructions:\n" +
+            "To build something, click on:\n" +
+            "- a corner (circle) for settlement/city\n" +
+            "- a road (thick line) for road\n" +
+            "Resources are automatically checked."
         );
-        anleitung.setFont(Font.font("Arial", 12));
-        anleitung.setWrapText(true);
-        anleitung.setStyle("-fx-background-color: #f8f8f8; -fx-border-color: #ccc; -fx-padding: 8; margin-top: 10px;");
-        getChildren().add(anleitung);
+        instructions.setFont(Font.font("Arial", 12));
+        instructions.setWrapText(true);
+        instructions.setStyle("-fx-background-color: #f8f8f8; -fx-border-color: #ccc; -fx-padding: 8; margin-top: 10px;");
+        getChildren().add(instructions);
     }
 
     private VBox createDiceSection() {
@@ -78,24 +78,24 @@ public class ControlPanel extends VBox {
         section.setPadding(new Insets(5));
         section.setStyle("-fx-background-color: white; -fx-border-color: #ddd;");
 
-        Label title = new Label("Würfel");
+        Label title = new Label("Dice");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         section.getChildren().add(title);
 
         diceLabel.setFont(Font.font("Arial", 14));
         section.getChildren().add(diceLabel);
 
-        // Neuer Würfel-Button - immer verfügbar
-        Button newRollButton = new Button("🎲 WÜRFELN 🎲");
+        // New dice button - always available
+        Button newRollButton = new Button("🎲 ROLL DICE 🎲");
         newRollButton.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #4CAF50; -fx-text-fill: white;");
         newRollButton.setOnAction(e -> {
             if (gameState.getCurrentPhase() == GameState.GamePhase.PLAY) {
                 gameState.rollDice();
                 updateDisplay();
                 notifyAction();
-                showInfo("Würfel geworfen!", "Würfel: " + gameState.getDiceRoll());
+                showInfo("Dice rolled!", "Dice: " + gameState.getDiceRoll());
             } else {
-                showError("Nicht verfügbar", "Würfeln ist nur in der Spielphase möglich!");
+                showError("Not available", "Dice rolling is only possible in the play phase!");
             }
         });
         section.getChildren().add(newRollButton);
@@ -108,21 +108,21 @@ public class ControlPanel extends VBox {
         section.setPadding(new Insets(5));
         section.setStyle("-fx-background-color: white; -fx-border-color: #ddd;");
 
-        Label title = new Label("Gebäude bauen");
+        Label title = new Label("Build Buildings");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         section.getChildren().add(title);
 
         HBox buildingButtons = new HBox(5);
         
-        Button settlementButton = new Button("Siedlung");
+        Button settlementButton = new Button("Settlement");
         settlementButton.setOnAction(e -> buildSettlement());
         buildingButtons.getChildren().add(settlementButton);
 
-        Button cityButton = new Button("Stadt");
+        Button cityButton = new Button("City");
         cityButton.setOnAction(e -> buildCity());
         buildingButtons.getChildren().add(cityButton);
 
-        Button roadButton = new Button("Straße");
+        Button roadButton = new Button("Road");
         roadButton.setOnAction(e -> buildRoad());
         buildingButtons.getChildren().add(roadButton);
 
@@ -135,15 +135,15 @@ public class ControlPanel extends VBox {
         section.setPadding(new Insets(5));
         section.setStyle("-fx-background-color: white; -fx-border-color: #ddd;");
 
-        Label title = new Label("Zugverwaltung");
+        Label title = new Label("Turn Management");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         section.getChildren().add(title);
 
-        // Entfernt: Button nextTurnButton = new Button("Nächster Zug");
+        // Removed: Button nextTurnButton = new Button("Next Turn");
         // section.getChildren().add(nextTurnButton);
 
-        // Handels-Button
-        Button tradeButton = new Button("Handel");
+        // Trade button
+        Button tradeButton = new Button("Trade");
         tradeButton.setOnAction(e -> openTradeDialog());
         section.getChildren().add(tradeButton);
 
@@ -155,13 +155,13 @@ public class ControlPanel extends VBox {
         section.setPadding(new Insets(5));
         section.setStyle("-fx-background-color: #fff3cd; -fx-border-color: #ffeaa7;");
 
-        Label title = new Label("Aufbauphase");
+        Label title = new Label("Setup Phase");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         section.getChildren().add(title);
 
         String setupInfo = switch (gameState.getSetupPhase()) {
-            case FORWARD -> "Vorwärtsrunde: Spieler 1 → 2 → 3 → 4";
-            case BACKWARD -> "Rückwärtsrunde: Spieler 4 → 3 → 2 → 1";
+            case FORWARD -> "Forward round: Player 1 → 2 → 3 → 4";
+            case BACKWARD -> "Backward round: Player 4 → 3 → 2 → 1";
         };
         
         Label info = new Label(setupInfo);
@@ -169,7 +169,7 @@ public class ControlPanel extends VBox {
         info.setWrapText(true);
         section.getChildren().add(info);
 
-        Label instructions = new Label("Jeder Spieler baut: 1. Siedlung, 2. Straße → automatischer Wechsel");
+        Label instructions = new Label("Each player builds: 1. Settlement, 2. Road → automatic switch");
         instructions.setFont(Font.font("Arial", 9));
         instructions.setWrapText(true);
         section.getChildren().add(instructions);
@@ -178,11 +178,11 @@ public class ControlPanel extends VBox {
         Player currentPlayer = gameState.getCurrentPlayer();
         String status = "";
         if (!gameState.isSettlementBuilt()) {
-            status = currentPlayer.getName() + " muss eine Siedlung bauen";
+            status = currentPlayer.getName() + " must build a settlement";
         } else if (!gameState.isRoadBuilt()) {
-            status = currentPlayer.getName() + " muss eine Straße bauen";
+            status = currentPlayer.getName() + " must build a road";
         } else {
-            status = currentPlayer.getName() + " ist fertig";
+            status = currentPlayer.getName() + " is finished";
         }
         
         Label progress = new Label(status);
@@ -198,11 +198,11 @@ public class ControlPanel extends VBox {
         section.setPadding(new Insets(5));
         section.setStyle("-fx-background-color: #d4edda; -fx-border-color: #c3e6cb;");
 
-        Label title = new Label("Spielphase");
+        Label title = new Label("Play Phase");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         section.getChildren().add(title);
 
-        Label info = new Label("Würfeln Sie, um Ressourcen zu erhalten!");
+        Label info = new Label("Roll the dice to receive resources!");
         info.setFont(Font.font("Arial", 10));
         info.setWrapText(true);
         section.getChildren().add(info);
@@ -210,41 +210,39 @@ public class ControlPanel extends VBox {
         return section;
     }
 
-
-
     private void buildSettlement() {
         Player currentPlayer = gameState.getCurrentPlayer();
         if (gameState.buildSettlement(currentPlayer)) {
-            showInfo("Siedlung gebaut!", "Du hast erfolgreich eine Siedlung gebaut.");
+            showInfo("Settlement built!", "You have successfully built a settlement.");
             updateDisplay();
             notifyAction();
         } else {
             String cost = BuildingCosts.getCostString(BuildingCosts.BuildingType.SETTLEMENT);
-            showError("Fehler", "Du kannst keine Siedlung bauen.\nKosten: " + cost + "\nÜberprüfe deine Ressourcen.");
+            showError("Error", "You cannot build a settlement.\nCost: " + cost + "\nCheck your resources.");
         }
     }
 
     private void buildCity() {
         Player currentPlayer = gameState.getCurrentPlayer();
         if (gameState.buildCity(currentPlayer)) {
-            showInfo("Stadt gebaut!", "Du hast erfolgreich eine Stadt gebaut.");
+            showInfo("City built!", "You have successfully built a city.");
             updateDisplay();
             notifyAction();
         } else {
             String cost = BuildingCosts.getCostString(BuildingCosts.BuildingType.CITY);
-            showError("Fehler", "Du kannst keine Stadt bauen.\nKosten: " + cost + "\nÜberprüfe deine Ressourcen.");
+            showError("Error", "You cannot build a city.\nCost: " + cost + "\nCheck your resources.");
         }
     }
 
     private void buildRoad() {
         Player currentPlayer = gameState.getCurrentPlayer();
         if (gameState.buildRoad(currentPlayer)) {
-            showInfo("Straße gebaut!", "Du hast erfolgreich eine Straße gebaut.");
+            showInfo("Road built!", "You have successfully built a road.");
             updateDisplay();
             notifyAction();
         } else {
             String cost = BuildingCosts.getCostString(BuildingCosts.BuildingType.ROAD);
-            showError("Fehler", "Du kannst keine Straße bauen.\nKosten: " + cost + "\nÜberprüfe deine Ressourcen.");
+            showError("Error", "You cannot build a road.\nCost: " + cost + "\nCheck your resources.");
         }
     }
 
@@ -268,12 +266,12 @@ public class ControlPanel extends VBox {
     public void updateDisplay() {
         // Update dice label
         int diceRoll = gameState.getDiceRoll();
-        diceLabel.setText("Würfel: " + (diceRoll > 0 ? String.valueOf(diceRoll) : "-"));
+        diceLabel.setText("Dice: " + (diceRoll > 0 ? String.valueOf(diceRoll) : "-"));
 
         // Update current player label
         Player currentPlayer = gameState.getCurrentPlayer();
-        currentPlayerLabel.setText("Aktueller Spieler: " + currentPlayer.getName() + 
-                                 " (Siegpunkte: " + currentPlayer.getVictoryPoints() + ")");
+        currentPlayerLabel.setText("Current Player: " + currentPlayer.getName() + 
+                                 " (Victory Points: " + currentPlayer.getVictoryPoints() + ")");
         
         // Roll button state is now handled in the button's action
     }
@@ -309,15 +307,15 @@ public class ControlPanel extends VBox {
         java.util.List<Player> otherPlayers = new java.util.ArrayList<>(gameState.getPlayers());
         otherPlayers.remove(currentPlayer);
         if (otherPlayers.isEmpty()) {
-            showError("Handel nicht möglich", "Es gibt keine anderen Spieler.");
+            showError("Trade not possible", "There are no other players.");
             return;
         }
 
         Dialog<Void> dialog = new Dialog<>();
-        dialog.setTitle("Handel anbieten");
-        dialog.setHeaderText("Wähle einen Mitspieler und Ressourcen für den Handel aus.");
+        dialog.setTitle("Offer Trade");
+        dialog.setHeaderText("Choose a fellow player and resources for the trade.");
 
-        // Auswahlfelder
+        // Selection fields
         ComboBox<Player> playerBox = new ComboBox<>();
         playerBox.getItems().addAll(otherPlayers);
         playerBox.getSelectionModel().selectFirst();
@@ -330,7 +328,7 @@ public class ControlPanel extends VBox {
         getBox.getItems().addAll(ResourceType.values());
         getBox.getSelectionModel().selectFirst();
 
-        // Mengen-Spinners
+        // Quantity spinners
         Spinner<Integer> giveAmount = new Spinner<>(1, 99, 1);
         Spinner<Integer> getAmount = new Spinner<>(1, 99, 1);
         giveAmount.setEditable(true);
@@ -340,17 +338,17 @@ public class ControlPanel extends VBox {
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
-        grid.add(new Label("Mitspieler:"), 0, 0);
+        grid.add(new Label("Fellow Player:"), 0, 0);
         grid.add(playerBox, 1, 0);
-        grid.add(new Label("Ich gebe:"), 0, 1);
+        grid.add(new Label("I give:"), 0, 1);
         grid.add(giveBox, 1, 1);
         grid.add(giveAmount, 2, 1);
-        grid.add(new Label("Ich bekomme:"), 0, 2);
+        grid.add(new Label("I get:"), 0, 2);
         grid.add(getBox, 1, 2);
         grid.add(getAmount, 2, 2);
 
         dialog.getDialogPane().setContent(grid);
-        ButtonType offerButtonType = new ButtonType("Handel anbieten", ButtonBar.ButtonData.OK_DONE);
+        ButtonType offerButtonType = new ButtonType("Offer Trade", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(offerButtonType, ButtonType.CANCEL);
 
         dialog.setResultConverter(dialogButton -> {
@@ -361,39 +359,39 @@ public class ControlPanel extends VBox {
                 int giveQty = giveAmount.getValue();
                 int getQty = getAmount.getValue();
                 if (partner == null || give == null || get == null) {
-                    showError("Ungültige Auswahl", "Bitte wähle alles aus.");
+                    showError("Invalid selection", "Please select everything.");
                     return null;
                 }
                 if (currentPlayer.getResourceCount(give) < giveQty) {
-                    showError("Nicht genug Ressourcen", "Du hast nicht genug von dieser Ressource.");
+                    showError("Not enough resources", "You don't have enough of this resource.");
                     return null;
                 }
                 if (partner.getResourceCount(get) < getQty) {
-                    showError("Nicht genug Ressourcen", "Der Handelspartner hat nicht genug von der gewünschten Ressource.");
+                    showError("Not enough resources", "The trading partner doesn't have enough of the desired resource.");
                     return null;
                 }
-                // Bestätigung beim Partner einholen
+                // Get confirmation from partner
                 Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Handelsangebot");
-                confirm.setHeaderText(partner.getName() + ", möchtest du diesen Handel annehmen?");
+                confirm.setTitle("Trade Offer");
+                confirm.setHeaderText(partner.getName() + ", do you want to accept this trade?");
                 confirm.setContentText(
-                    currentPlayer.getName() + " bietet: " + giveQty + "x " + give.getGermanName() +
-                    " gegen " + getQty + "x " + get.getGermanName()
+                    currentPlayer.getName() + " offers: " + giveQty + "x " + give.getDisplayName() +
+                    " for " + getQty + "x " + get.getDisplayName()
                 );
                 java.util.Optional<ButtonType> result = confirm.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
-                    // Handel durchführen (mehrfache Übergabe)
+                    // Execute trade (multiple transfers)
                     for (int i = 0; i < giveQty; i++) {
                         gameState.tradeResources(currentPlayer, partner, give, get);
                     }
                     for (int i = 1; i < getQty; i++) {
                         gameState.tradeResources(currentPlayer, partner, give, get);
                     }
-                    showInfo("Handel erfolgreich", "Der Handel wurde durchgeführt.");
+                    showInfo("Trade successful", "The trade has been executed.");
                     updateDisplay();
                     notifyAction();
                 } else {
-                    showInfo("Handel abgelehnt", partner.getName() + " hat den Handel abgelehnt.");
+                    showInfo("Trade declined", partner.getName() + " has declined the trade.");
                 }
             }
             return null;

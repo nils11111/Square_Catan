@@ -47,7 +47,7 @@ public class GameWindow extends BorderPane {
         // Right: Player information
         setRight(playerInfoPanel);
         
-        // Links: Control panel (statt unten)
+        // Left: Control panel (instead of bottom)
         setLeft(controlPanel);
         
         // Top: Status bar
@@ -104,27 +104,27 @@ public class GameWindow extends BorderPane {
     }
 
     private void showGameOverDialog() {
-        // Siegeranimation: großes, farbiges Fenster mit Glückwunsch
+        // Winner animation: large, colorful window with congratulations
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("🎉 Spielende - Wir haben einen Sieger! 🎉");
-        alert.setHeaderText("Herzlichen Glückwunsch!");
-        alert.setContentText(gameState.getWinner().getName() + " hat gewonnen mit " + 
-                           gameState.getWinner().getVictoryPoints() + " Siegpunkten!\n\n🎊🎊🎊");
-        // Animation: Farbenwechsel (einfach, da JavaFX Alert limitiert)
+        alert.setTitle("🎉 Game Over - We Have a Winner! 🎉");
+        alert.setHeaderText("Congratulations!");
+        alert.setContentText(gameState.getWinner().getName() + " has won with " + 
+                           gameState.getWinner().getVictoryPoints() + " victory points!\n\n🎊🎊🎊");
+        // Animation: color change (simple, since JavaFX Alert is limited)
         DialogPane pane = alert.getDialogPane();
         pane.setStyle("-fx-background-color: linear-gradient(to bottom, #fff700, #ff7f00, #ff007f, #7f00ff, #007fff, #00ff7f);" +
                       "-fx-font-size: 20px; -fx-font-weight: bold;");
-        // Konfetti-Emoji als Deko
+        // Confetti emoji as decoration
         Label confetti = new Label("🎉🎊🎉");
         confetti.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 48));
         pane.setGraphic(confetti);
-        ButtonType newGameButton = new ButtonType("Neues Spiel");
-        ButtonType exitButton = new ButtonType("Beenden");
+        ButtonType newGameButton = new ButtonType("New Game");
+        ButtonType exitButton = new ButtonType("Exit");
         alert.getButtonTypes().setAll(newGameButton, exitButton);
         alert.showAndWait().ifPresent(response -> {
             if (response == newGameButton) {
                 // TODO: Implement new game functionality
-                System.out.println("Neues Spiel wird gestartet...");
+                System.out.println("Starting new game...");
             } else {
                 System.exit(0);
             }

@@ -1,0 +1,60 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+-classpath
+'C:/Users/Win11 Pro/.m2/repository/org/openjfx/javafx-controls/17.0.2/javafx-controls-17.0.2.jar;C:/Users/Win11 Pro/.m2/repository/org/openjfx/javafx-controls/17.0.2/javafx-controls-17.0.2-win.jar;C:/Users/Win11 Pro/.m2/repository/org/openjfx/javafx-graphics/17.0.2/javafx-graphics-17.0.2.jar;C:/Users/Win11 Pro/.m2/repository/org/openjfx/javafx-graphics/17.0.2/javafx-graphics-17.0.2-win.jar;C:/Users/Win11 Pro/.m2/repository/org/openjfx/javafx-base/17.0.2/javafx-base-17.0.2.jar;C:/Users/Win11 Pro/.m2/repository/org/openjfx/javafx-base/17.0.2/javafx-base-17.0.2-win.jar;C:/Users/Win11 Pro/.m2/repository/org/openjfx/javafx-fxml/17.0.2/javafx-fxml-17.0.2.jar;C:/Users/Win11 Pro/.m2/repository/org/openjfx/javafx-fxml/17.0.2/javafx-fxml-17.0.2-win.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+-sourcepath
+'C:/Users/Win11 Pro/Desktop/altlasten/Studium/Module/Programmieren/Java_Programmieren/SVC/Square_Catan/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2025. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/Win11 Pro/Desktop/altlasten/Studium/Module/Programmieren/Java_Programmieren/SVC/Square_Catan/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Square Catan 1.0.0 API'
+-use
+-version
+-windowtitle
+'Square Catan 1.0.0 API'
+com.catan
+com.catan.model
+com.catan.ui
+C:\Users\Win11 Pro\.m2\repository\org\openjfx\javafx-controls\17.0.2\javafx-controls-17.0.2.jar = 1752431355503
+C:\Users\Win11 Pro\.m2\repository\org\openjfx\javafx-controls\17.0.2\javafx-controls-17.0.2-win.jar = 1752431356539
+C:\Users\Win11 Pro\.m2\repository\org\openjfx\javafx-graphics\17.0.2\javafx-graphics-17.0.2.jar = 1752431355548
+C:\Users\Win11 Pro\.m2\repository\org\openjfx\javafx-graphics\17.0.2\javafx-graphics-17.0.2-win.jar = 1752431356696
+C:\Users\Win11 Pro\.m2\repository\org\openjfx\javafx-base\17.0.2\javafx-base-17.0.2.jar = 1752431355610
+C:\Users\Win11 Pro\.m2\repository\org\openjfx\javafx-base\17.0.2\javafx-base-17.0.2-win.jar = 1752431356128
+C:\Users\Win11 Pro\.m2\repository\org\openjfx\javafx-fxml\17.0.2\javafx-fxml-17.0.2.jar = 1752431355591
+C:\Users\Win11 Pro\.m2\repository\org\openjfx\javafx-fxml\17.0.2\javafx-fxml-17.0.2-win.jar = 1752431355779
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\src\main\java = 1752431344958
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\allclasses-index.html = 1752441580277
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\allpackages-index.html = 1752441580288
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\copy.svg = 1752441580441
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\element-list = 1752441579756
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\help-doc.html = 1752441580421
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\index-all.html = 1752441580389
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\index.html = 1752441580234
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\link.svg = 1752441580444
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\member-search-index.js = 1752441580309
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\module-search-index.js = 1752441580292
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\overview-summary.html = 1752441580408
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\overview-tree.html = 1752441580223
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\package-search-index.js = 1752441580301
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\script.js = 1752441580438
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\search-page.js = 1752441580462
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\search.html = 1752441580402
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\search.js = 1752441580457
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\stylesheet.css = 1752441580426
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\tag-search-index.js = 1752441580321
+C:\Users\Win11 Pro\Desktop\altlasten\Studium\Module\Programmieren\Java_Programmieren\SVC\Square_Catan\target\reports\apidocs\type-search-index.js = 1752441580305

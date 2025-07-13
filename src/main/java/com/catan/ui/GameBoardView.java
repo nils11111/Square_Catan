@@ -83,17 +83,17 @@ public class GameBoardView extends GridPane {
         legend.setPadding(new Insets(10));
         legend.setStyle("-fx-background-color: white; -fx-border-color: #ccc; -fx-border-width: 1;");
         
-        Label title = new Label("Ressourcen-Legende");
+        Label title = new Label("Resource Legend");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         legend.getChildren().add(title);
         
         // Add legend items
-        addLegendItem(legend, "Wald", Color.FORESTGREEN, "Holz");
-        addLegendItem(legend, "Hügel", Color.SADDLEBROWN, "Lehm");
-        addLegendItem(legend, "Berge", Color.GRAY, "Erz");
-        addLegendItem(legend, "Felder", Color.GOLD, "Getreide");
-        addLegendItem(legend, "Weide", Color.LIGHTGREEN, "Wolle");
-        addLegendItem(legend, "Wüste", Color.SANDYBROWN, "Keine Ressource");
+        addLegendItem(legend, "Forest", Color.FORESTGREEN, "Wood");
+        addLegendItem(legend, "Hills", Color.SADDLEBROWN, "Brick");
+        addLegendItem(legend, "Mountains", Color.GRAY, "Ore");
+        addLegendItem(legend, "Fields", Color.GOLD, "Grain");
+        addLegendItem(legend, "Pasture", Color.LIGHTGREEN, "Wool");
+        addLegendItem(legend, "Desert", Color.SANDYBROWN, "No Resource");
         
         // Add to the right side of the board - account for new grid size
         int gridCols = (gameBoard.getCols() + 1) * 2;
@@ -141,12 +141,12 @@ public class GameBoardView extends GridPane {
             this.row = row;
             this.col = col;
             
-            // Create background rectangle - größer
+            // Create background rectangle - larger
             this.background = new Rectangle(120, 120);
             background.setStroke(Color.BLACK);
             background.setStrokeWidth(2);
             
-            // Schutz gegen null-Tile
+            // Protection against null tile
             if (tile == null) {
                 this.numberLabel = new Label();
                 background.setFill(Color.LIGHTGRAY);
@@ -154,7 +154,7 @@ public class GameBoardView extends GridPane {
                 setDisable(true);
                 return;
             }
-            // Create number label - größer
+            // Create number label - larger
             this.numberLabel = new Label();
             if (tile.getNumber() != null) {
                 numberLabel.setText(String.valueOf(tile.getNumber()));
@@ -162,7 +162,7 @@ public class GameBoardView extends GridPane {
                 numberLabel.setTextFill(getNumberColor(tile.getNumber()));
             }
             
-            // Setup layout - nur Hintergrund und Nummer
+            // Setup layout - only background and number
             getChildren().addAll(background, numberLabel);
             setBackgroundColor();
             
@@ -195,7 +195,7 @@ public class GameBoardView extends GridPane {
 
         private void handleTileClick() {
             // Handle tile selection for building placement
-            System.out.println("Tile clicked: " + tile.getTerrainType().getGermanName() + 
+            System.out.println("Tile clicked: " + tile.getTerrainType().getDisplayName() + 
                              " (Row: " + row + ", Col: " + col + ")");
             notifyAction();
         }
@@ -214,13 +214,13 @@ public class GameBoardView extends GridPane {
             this.row = row;
             this.col = col;
             
-            // Create circle for vertex - größer
+            // Create circle for vertex - larger
             this.circle = new Circle(15);
             circle.setStroke(Color.BLACK);
             circle.setStrokeWidth(3);
             circle.setFill(Color.TRANSPARENT);
             
-            // Create building label - größer
+            // Create building label - larger
             this.buildingLabel = new Label();
             buildingLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
             
@@ -257,7 +257,7 @@ public class GameBoardView extends GridPane {
             int playerIndex = gameState.getPlayers().indexOf(player);
             return switch (playerIndex) {
                 case 0 -> Color.RED;
-                case 1 -> Color.rgb(100, 149, 237, 0.7); // Transparentes Blau
+                case 1 -> Color.rgb(100, 149, 237, 0.7); // Transparent blue
                 case 2 -> Color.GREEN;
                 case 3 -> Color.YELLOW;
                 default -> Color.GRAY;
@@ -274,7 +274,7 @@ public class GameBoardView extends GridPane {
                     if (gameState.buildSettlementAtVertex(row, col, currentPlayer)) {
                         updateDisplay();
                         notifyAction();
-                        System.out.println("Siedlung gebaut an Vertex (" + row + ", " + col + ")");
+                        System.out.println("Settlement built at Vertex (" + row + ", " + col + ")");
                     }
                 }
             } else if (gameState.getCurrentPhase() == GameState.GamePhase.PLAY) {
@@ -286,7 +286,7 @@ public class GameBoardView extends GridPane {
                             if (gameState.buildCityAtVertex(row, col, currentPlayer)) {
                                 updateDisplay();
                                 notifyAction();
-                                System.out.println("Stadt gebaut an Vertex (" + row + ", " + col + ")");
+                                System.out.println("City built at Vertex (" + row + ", " + col + ")");
                             }
                         }
                     } else if (!vertex.isOccupied()) {
@@ -294,7 +294,7 @@ public class GameBoardView extends GridPane {
                         if (gameState.buildSettlementAtVertex(row, col, currentPlayer)) {
                             updateDisplay();
                             notifyAction();
-                            System.out.println("Siedlung gebaut an Vertex (" + row + ", " + col + ")");
+                            System.out.println("Settlement built at Vertex (" + row + ", " + col + ")");
                         }
                     }
                 }
@@ -316,7 +316,7 @@ public class GameBoardView extends GridPane {
             this.col = col;
             this.isHorizontal = isHorizontal;
             
-            // Create line for edge - größer
+            // Create line for edge - larger
             if (isHorizontal) {
                 this.line = new Line(0, 60, 120, 60);
             } else {
@@ -352,7 +352,7 @@ public class GameBoardView extends GridPane {
             int playerIndex = gameState.getPlayers().indexOf(player);
             return switch (playerIndex) {
                 case 0 -> Color.RED;
-                case 1 -> Color.rgb(100, 149, 237, 0.7); // Transparentes Blau
+                case 1 -> Color.rgb(100, 149, 237, 0.7); // Transparent blue
                 case 2 -> Color.GREEN;
                 case 3 -> Color.YELLOW;
                 default -> Color.GRAY;
@@ -375,7 +375,7 @@ public class GameBoardView extends GridPane {
                     if (success) {
                         updateDisplay();
                         notifyAction();
-                        System.out.println("Straße gebaut an Edge (" + row + ", " + col + ", " + 
+                        System.out.println("Road built at Edge (" + row + ", " + col + ", " + 
                                          (isHorizontal ? "H" : "V") + ")");
                     }
                 }
@@ -389,7 +389,7 @@ public class GameBoardView extends GridPane {
                     if (success) {
                         updateDisplay();
                         notifyAction();
-                        System.out.println("Straße gebaut an Edge (" + row + ", " + col + ", " + 
+                        System.out.println("Road built at Edge (" + row + ", " + col + ", " + 
                                          (isHorizontal ? "H" : "V") + ")");
                     }
                 }

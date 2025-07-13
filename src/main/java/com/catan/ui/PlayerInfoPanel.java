@@ -33,7 +33,7 @@ public class PlayerInfoPanel extends VBox {
         setStyle("-fx-background-color: #f8f8f8; -fx-border-color: #ccc;");
 
         // Title
-        Label titleLabel = new Label("Spieler Information");
+        Label titleLabel = new Label("Player Information");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         titleLabel.setPadding(new Insets(0, 0, 10, 0));
         getChildren().add(titleLabel);
@@ -62,7 +62,7 @@ public class PlayerInfoPanel extends VBox {
         section.getChildren().add(playerLabels[playerIndex]);
 
         // Resources
-        Label resourcesTitle = new Label("Ressourcen:");
+        Label resourcesTitle = new Label("Resources:");
         resourcesTitle.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         section.getChildren().add(resourcesTitle);
 
@@ -76,7 +76,7 @@ public class PlayerInfoPanel extends VBox {
         section.getChildren().add(resourcesBox);
 
         // Buildings
-        Label buildingsTitle = new Label("Gebäude:");
+        Label buildingsTitle = new Label("Buildings:");
         buildingsTitle.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         section.getChildren().add(buildingsTitle);
 
@@ -95,25 +95,25 @@ public class PlayerInfoPanel extends VBox {
             // Update player label
             String playerText = player.getName();
             if (player == gameState.getCurrentPlayer()) {
-                playerText += " (Aktiv)";
+                playerText += " (Active)";
                 playerLabels[i].setTextFill(Color.BLUE);
             } else {
                 playerLabels[i].setTextFill(Color.BLACK);
             }
-            playerText += " - " + player.getVictoryPoints() + " Siegpunkte";
+            playerText += " - " + player.getVictoryPoints() + " Victory Points";
             playerLabels[i].setText(playerText);
 
             // Update resource labels
             for (int j = 0; j < ResourceType.values().length; j++) {
                 ResourceType resource = ResourceType.values()[j];
                 int count = player.getResourceCount(resource);
-                resourceLabels[i][j].setText(resource.getGermanName() + ": " + count);
+                resourceLabels[i][j].setText(resource.getDisplayName() + ": " + count);
             }
 
             // Update buildings label
-            String buildingsText = "Siedlungen: " + player.getSettlements() + 
-                                 " | Städte: " + player.getCities() + 
-                                 " | Straßen: " + player.getRoads();
+            String buildingsText = "Settlements: " + player.getSettlements() + 
+                                 " | Cities: " + player.getCities() + 
+                                 " | Roads: " + player.getRoads();
             
             // Find the buildings label in the player section
             VBox playerSection = (VBox) getChildren().get(i + 1); // +1 for title

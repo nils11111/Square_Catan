@@ -11,17 +11,17 @@ public class Vertex {
     private BuildingType buildingType;
 
     public enum BuildingType {
-        SETTLEMENT("Siedlung"),
-        CITY("Stadt");
+        SETTLEMENT("Settlement"),
+        CITY("City");
 
-        private final String germanName;
+        private final String displayName;
 
-        BuildingType(String germanName) {
-            this.germanName = germanName;
+        BuildingType(String displayName) {
+            this.displayName = displayName;
         }
 
-        public String getGermanName() {
-            return germanName;
+        public String getDisplayName() {
+            return displayName;
         }
     }
 

@@ -11,18 +11,18 @@ public class BuildingCosts {
     private static final Map<BuildingType, Map<ResourceType, Integer>> COSTS = new HashMap<>();
 
     public enum BuildingType {
-        SETTLEMENT("Siedlung"),
-        CITY("Stadt"),
-        ROAD("Straße");
+        SETTLEMENT("Settlement"),
+        CITY("City"),
+        ROAD("Road");
 
-        private final String germanName;
+        private final String displayName;
 
-        BuildingType(String germanName) {
-            this.germanName = germanName;
+        BuildingType(String displayName) {
+            this.displayName = displayName;
         }
 
-        public String getGermanName() {
-            return germanName;
+        public String getDisplayName() {
+            return displayName;
         }
     }
 
@@ -90,7 +90,7 @@ public class BuildingCosts {
             if (sb.length() > 0) {
                 sb.append(", ");
             }
-            sb.append(entry.getValue()).append(" ").append(entry.getKey().getGermanName());
+            sb.append(entry.getValue()).append(" ").append(entry.getKey().getDisplayName());
         }
         
         return sb.toString();

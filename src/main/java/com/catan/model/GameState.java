@@ -21,33 +21,33 @@ public class GameState {
     private boolean roadBuilt;       // Has current player built road this turn?
 
     public enum GamePhase {
-        SETUP("Aufbau"),
-        PLAY("Spiel"),
-        GAME_OVER("Spielende");
+        SETUP("Setup"),
+        PLAY("Play"),
+        GAME_OVER("Game Over");
 
-        private final String germanName;
+        private final String displayName;
 
-        GamePhase(String germanName) {
-            this.germanName = germanName;
+        GamePhase(String displayName) {
+            this.displayName = displayName;
         }
 
-        public String getGermanName() {
-            return germanName;
+        public String getDisplayName() {
+            return displayName;
         }
     }
 
     public enum SetupPhase {
-        FORWARD("Vorwärts"),
-        BACKWARD("Rückwärts");
+        FORWARD("Forward"),
+        BACKWARD("Backward");
 
-        private final String germanName;
+        private final String displayName;
 
-        SetupPhase(String germanName) {
-            this.germanName = germanName;
+        SetupPhase(String displayName) {
+            this.displayName = displayName;
         }
 
-        public String getGermanName() {
-            return germanName;
+        public String getDisplayName() {
+            return displayName;
         }
     }
 
@@ -58,7 +58,7 @@ public class GameState {
 
         this.players = new ArrayList<>();
         for (int i = 1; i <= playerCount; i++) {
-            players.add(new Player("Spieler " + i));
+            players.add(new Player("Player " + i));
         }
 
         // Create a 5x4 board with 19 tiles
@@ -153,10 +153,10 @@ public class GameState {
     public void rollDice() {
         if (currentPhase == GamePhase.PLAY) {
             diceRoll = (int) (Math.random() * 6) + (int) (Math.random() * 6) + 2; // 2-12
-            System.out.println("Würfel: " + diceRoll);
+            System.out.println("Dice: " + diceRoll);
             produceResources();
             
-            // Nach dem Würfeln zum nächsten Spieler wechseln
+            // Switch to next player after rolling
             nextPlayer();
         }
     }
@@ -175,7 +175,7 @@ public class GameState {
                             ResourceType resource = tile.getTerrainType().getResourceType();
                             int amount = vertex.getBuildingType() == Vertex.BuildingType.CITY ? 2 : 1;
                             owner.addResource(resource, amount);
-                            System.out.println(owner.getName() + " erhält " + amount + "x " + resource.getGermanName());
+                            System.out.println(owner.getName() + " receives " + amount + "x " + resource.getDisplayName());
                         }
                     }
                 }
@@ -370,29 +370,29 @@ public class GameState {
 
     public String getGameStatus() {
         if (gameEnded) {
-            return "Spielende! " + winner.getName() + " hat gewonnen mit " + winner.getVictoryPoints() + " Siegpunkten!";
+            return "Game Over! " + winner.getName() + " has won with " + winner.getVictoryPoints() + " victory points!";
         }
         
         Player current = getCurrentPlayer();
         String phaseInfo = currentPhase == GamePhase.SETUP ? 
-            "Phase: " + currentPhase.getGermanName() + " (" + setupPhase.getGermanName() + ")" :
-            "Phase: " + currentPhase.getGermanName();
+            "Phase: " + currentPhase.getDisplayName() + " (" + setupPhase.getDisplayName() + ")" :
+            "Phase: " + currentPhase.getDisplayName();
             
         String setupInfo = "";
         if (currentPhase == GamePhase.SETUP) {
             String buildingStatus = "";
             if (!settlementBuilt) {
-                buildingStatus = " - Baue zuerst eine Siedlung";
+                buildingStatus = " - Build a settlement first";
             } else if (!roadBuilt) {
-                buildingStatus = " - Baue jetzt eine Straße";
+                buildingStatus = " - Now build a road";
             }
             setupInfo = " | " + current.getName() + buildingStatus;
         }
             
         return phaseInfo + 
-               " | Aktueller Spieler: " + current.getName() + 
-               " | Siegpunkte: " + current.getVictoryPoints() +
+               " | Current Player: " + current.getName() + 
+               " | Victory Points: " + current.getVictoryPoints() +
                setupInfo +
-               " | Würfel: " + (diceRoll > 0 ? diceRoll : "-");
+               " | Dice: " + (diceRoll > 0 ? diceRoll : "-");
     }
 } 

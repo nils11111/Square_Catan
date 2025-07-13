@@ -5,25 +5,25 @@ package com.catan.model;
  * Each terrain type produces a specific resource when the corresponding number is rolled.
  */
 public enum TerrainType {
-    FOREST("Wald", ResourceType.WOOD, "🌲"),
-    HILLS("Hügel", ResourceType.BRICK, "🏔️"),
-    MOUNTAINS("Berge", ResourceType.ORE, "⛰️"),
-    FIELDS("Felder", ResourceType.GRAIN, "🌾"),
-    PASTURE("Weiden", ResourceType.WOOL, "🐑"),
-    DESERT("Wüste", null, "🏜️");
+    FOREST("Forest", ResourceType.WOOD, "🌲"),
+    HILLS("Hills", ResourceType.BRICK, "🏔️"),
+    MOUNTAINS("Mountains", ResourceType.ORE, "⛰️"),
+    FIELDS("Fields", ResourceType.GRAIN, "🌾"),
+    PASTURE("Pasture", ResourceType.WOOL, "🐑"),
+    DESERT("Desert", null, "🏜️");
 
-    private final String germanName;
+    private final String displayName;
     private final ResourceType resourceType;
     private final String emoji;
 
-    TerrainType(String germanName, ResourceType resourceType, String emoji) {
-        this.germanName = germanName;
+    TerrainType(String displayName, ResourceType resourceType, String emoji) {
+        this.displayName = displayName;
         this.resourceType = resourceType;
         this.emoji = emoji;
     }
 
-    public String getGermanName() {
-        return germanName;
+    public String getDisplayName() {
+        return displayName;
     }
 
     public ResourceType getResourceType() {
@@ -40,6 +40,6 @@ public enum TerrainType {
 
     @Override
     public String toString() {
-        return germanName;
+        return displayName;
     }
 } 
