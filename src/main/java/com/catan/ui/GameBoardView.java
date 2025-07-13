@@ -223,16 +223,37 @@ public class GameBoardView extends GridPane {
         }
 
         private void handleVertexClick() {
+            Player currentPlayer = gameState.getCurrentPlayer();
+            Vertex vertex = gameBoard.getVertex(row, col);
+            
             if (gameState.getCurrentPhase() == GameState.GamePhase.SETUP) {
                 // In setup phase, allow building without resource costs
-                Player currentPlayer = gameState.getCurrentPlayer();
-                Vertex vertex = gameBoard.getVertex(row, col);
-                
                 if (vertex != null && vertex.canBuildSettlement(currentPlayer)) {
                     if (gameState.buildSettlementAtVertex(row, col, currentPlayer)) {
                         updateDisplay();
                         notifyAction();
                         System.out.println("Siedlung gebaut an Vertex (" + row + ", " + col + ")");
+                    }
+                }
+            } else if (gameState.getCurrentPhase() == GameState.GamePhase.PLAY) {
+                // In play phase, check what can be built
+                if (vertex != null) {
+                    if (vertex.isOccupied() && vertex.getOwner() == currentPlayer) {
+                        // Can upgrade settlement to city
+                        if (vertex.getBuildingType() == Vertex.BuildingType.SETTLEMENT) {
+                            if (gameState.buildCityAtVertex(row, col, currentPlayer)) {
+                                updateDisplay();
+                                notifyAction();
+                                System.out.println("Stadt gebaut an Vertex (" + row + ", " + col + ")");
+                            }
+                        }
+                    } else if (!vertex.isOccupied()) {
+                        // Can build new settlement
+                        if (gameState.buildSettlementAtVertex(row, col, currentPlayer)) {
+                            updateDisplay();
+                            notifyAction();
+                            System.out.println("Siedlung gebaut an Vertex (" + row + ", " + col + ")");
+                        }
                     }
                 }
             }
@@ -297,13 +318,27 @@ public class GameBoardView extends GridPane {
         }
 
         private void handleEdgeClick() {
+            Player currentPlayer = gameState.getCurrentPlayer();
+            Edge edge = isHorizontal ? 
+                gameBoard.getHorizontalEdge(row, col) : 
+                gameBoard.getVerticalEdge(row, col);
+            
             if (gameState.getCurrentPhase() == GameState.GamePhase.SETUP) {
                 // In setup phase, allow building without resource costs
-                Player currentPlayer = gameState.getCurrentPlayer();
-                Edge edge = isHorizontal ? 
-                    gameBoard.getHorizontalEdge(row, col) : 
-                    gameBoard.getVerticalEdge(row, col);
-                
+                if (edge != null && edge.canBuildRoad(currentPlayer)) {
+                    boolean success = isHorizontal ? 
+                        gameState.buildRoadAtHorizontalEdge(row, col, currentPlayer) :
+                        gameState.buildRoadAtVerticalEdge(row, col, currentPlayer);
+                        
+                    if (success) {
+                        updateDisplay();
+                        notifyAction();
+                        System.out.println("Straße gebaut an Edge (" + row + ", " + col + ", " + 
+                                         (isHorizontal ? "H" : "V") + ")");
+                    }
+                }
+            } else if (gameState.getCurrentPhase() == GameState.GamePhase.PLAY) {
+                // In play phase, check resource costs
                 if (edge != null && edge.canBuildRoad(currentPlayer)) {
                     boolean success = isHorizontal ? 
                         gameState.buildRoadAtHorizontalEdge(row, col, currentPlayer) :

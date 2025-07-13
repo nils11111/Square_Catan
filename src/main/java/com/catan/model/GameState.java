@@ -194,18 +194,34 @@ public class GameState {
 
     // Building methods for vertices (settlements and cities)
     public boolean buildSettlementAtVertex(int vertexRow, int vertexCol, Player player) {
-        if (currentPhase != GamePhase.SETUP || player != getCurrentPlayer()) {
-            return false; // Only current player can build in setup
+        if (player != getCurrentPlayer()) {
+            return false; // Only current player can build
         }
         
-        if (settlementBuilt) {
-            return false; // Already built settlement this turn
+        if (currentPhase == GamePhase.SETUP) {
+            if (settlementBuilt) {
+                return false; // Already built settlement this turn
+            }
+        } else if (currentPhase == GamePhase.PLAY) {
+            // In play phase, check resource costs
+            if (!BuildingCosts.canAfford(player, BuildingCosts.BuildingType.SETTLEMENT)) {
+                return false;
+            }
         }
         
         Vertex vertex = gameBoard.getVertex(vertexRow, vertexCol);
         if (vertex != null && vertex.canBuildSettlement(player)) {
+            if (currentPhase == GamePhase.PLAY) {
+                // Pay resources in play phase
+                if (!BuildingCosts.payCost(player, BuildingCosts.BuildingType.SETTLEMENT)) {
+                    return false;
+                }
+            }
+            
             if (vertex.buildSettlement(player)) {
-                settlementBuilt = true;
+                if (currentPhase == GamePhase.SETUP) {
+                    settlementBuilt = true;
+                }
                 checkForWinner(player);
                 return true;
             }
