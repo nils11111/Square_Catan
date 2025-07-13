@@ -37,6 +37,15 @@ public class GameBoard {
         List<TerrainType> terrainTypes = createTerrainDistribution();
         List<Integer> numbers = createNumberDistribution();
         
+        // Füge ggf. weitere TerrainTypes und Zahlen hinzu, damit alle Felder belegt werden können
+        int totalTiles = rows * cols;
+        while (terrainTypes.size() < totalTiles) {
+            terrainTypes.add(TerrainType.FOREST);
+        }
+        while (numbers.size() < totalTiles) {
+            numbers.add(8); // Standardwert
+        }
+        
         // Shuffle both lists
         Collections.shuffle(terrainTypes, random);
         Collections.shuffle(numbers, random);
@@ -46,10 +55,6 @@ public class GameBoard {
         
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
-                if (row == EMPTY_ROW && col == EMPTY_COL) {
-                    tiles[row][col] = null; // empty field
-                    continue;
-                }
                 TerrainType terrain = terrainTypes.get(terrainIndex++);
                 Integer number = terrain == TerrainType.DESERT ? null : numbers.get(numberIndex++);
                 tiles[row][col] = new Tile(terrain, number);

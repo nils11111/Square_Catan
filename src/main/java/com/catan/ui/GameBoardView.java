@@ -146,9 +146,9 @@ public class GameBoardView extends GridPane {
             background.setStroke(Color.BLACK);
             background.setStrokeWidth(2);
             
+            // Schutz gegen null-Tile
             if (tile == null) {
-                // Empty field: just gray background, no labels, no click
-                this.numberLabel = null;
+                this.numberLabel = new Label();
                 background.setFill(Color.LIGHTGRAY);
                 getChildren().add(background);
                 setDisable(true);

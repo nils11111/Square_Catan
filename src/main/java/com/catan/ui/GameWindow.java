@@ -47,8 +47,8 @@ public class GameWindow extends BorderPane {
         // Right: Player information
         setRight(playerInfoPanel);
         
-        // Bottom: Control panel
-        setBottom(controlPanel);
+        // Links: Control panel (statt unten)
+        setLeft(controlPanel);
         
         // Top: Status bar
         setTop(statusLabel);
@@ -86,7 +86,7 @@ public class GameWindow extends BorderPane {
     
     private void recreateControlPanel() {
         // Remove old control panel
-        setBottom(null);
+        setLeft(null);
         
         // Create new control panel
         ControlPanel newControlPanel = new ControlPanel(gameState);
@@ -99,7 +99,7 @@ public class GameWindow extends BorderPane {
         });
         
         // Set new control panel
-        setBottom(newControlPanel);
+        setLeft(newControlPanel);
         this.controlPanel = newControlPanel;
     }
 

@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.layout.GridPane;
 
 /**
  * Provides game controls for dice rolling, building, and turn management.
@@ -44,10 +45,6 @@ public class ControlPanel extends VBox {
         VBox diceSection = createDiceSection();
         getChildren().add(diceSection);
 
-        // Building section
-        VBox buildingSection = createBuildingSection();
-        getChildren().add(buildingSection);
-
         // Turn management
         VBox turnSection = createTurnSection();
         getChildren().add(turnSection);
@@ -61,6 +58,19 @@ public class ControlPanel extends VBox {
             VBox playSection = createPlaySection();
             getChildren().add(playSection);
         }
+
+        // Anleitung unten einfügen
+        Label anleitung = new Label(
+            "Anleitung:\n" +
+            "Um etwas zu bauen, klicke auf:\n" +
+            "- eine Kreuzung (Kreis) für Siedlung/Stadt\n" +
+            "- eine Straße (dicke Linie) für Straße\n" +
+            "Ressourcen werden automatisch geprüft."
+        );
+        anleitung.setFont(Font.font("Arial", 12));
+        anleitung.setWrapText(true);
+        anleitung.setStyle("-fx-background-color: #f8f8f8; -fx-border-color: #ccc; -fx-padding: 8; margin-top: 10px;");
+        getChildren().add(anleitung);
     }
 
     private VBox createDiceSection() {
@@ -129,9 +139,13 @@ public class ControlPanel extends VBox {
         title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         section.getChildren().add(title);
 
-        Button nextTurnButton = new Button("Nächster Zug");
-        nextTurnButton.setOnAction(e -> nextTurn());
-        section.getChildren().add(nextTurnButton);
+        // Entfernt: Button nextTurnButton = new Button("Nächster Zug");
+        // section.getChildren().add(nextTurnButton);
+
+        // Handels-Button
+        Button tradeButton = new Button("Handel");
+        tradeButton.setOnAction(e -> openTradeDialog());
+        section.getChildren().add(tradeButton);
 
         return section;
     }
@@ -288,5 +302,87 @@ public class ControlPanel extends VBox {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void openTradeDialog() {
+        Player currentPlayer = gameState.getCurrentPlayer();
+        java.util.List<Player> otherPlayers = new java.util.ArrayList<>(gameState.getPlayers());
+        otherPlayers.remove(currentPlayer);
+        if (otherPlayers.isEmpty()) {
+            showError("Handel nicht möglich", "Es gibt keine anderen Spieler.");
+            return;
+        }
+
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Handel anbieten");
+        dialog.setHeaderText("Wähle einen Mitspieler und Ressourcen für den Handel aus.");
+
+        // Auswahlfelder
+        ComboBox<Player> playerBox = new ComboBox<>();
+        playerBox.getItems().addAll(otherPlayers);
+        playerBox.getSelectionModel().selectFirst();
+
+        ComboBox<ResourceType> giveBox = new ComboBox<>();
+        giveBox.getItems().addAll(ResourceType.values());
+        giveBox.getSelectionModel().selectFirst();
+
+        ComboBox<ResourceType> getBox = new ComboBox<>();
+        getBox.getItems().addAll(ResourceType.values());
+        getBox.getSelectionModel().selectFirst();
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+        grid.add(new Label("Mitspieler:"), 0, 0);
+        grid.add(playerBox, 1, 0);
+        grid.add(new Label("Ich gebe:"), 0, 1);
+        grid.add(giveBox, 1, 1);
+        grid.add(new Label("Ich bekomme:"), 0, 2);
+        grid.add(getBox, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+        ButtonType offerButtonType = new ButtonType("Handel anbieten", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(offerButtonType, ButtonType.CANCEL);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == offerButtonType) {
+                Player partner = playerBox.getValue();
+                ResourceType give = giveBox.getValue();
+                ResourceType get = getBox.getValue();
+                if (partner == null || give == null || get == null) {
+                    showError("Ungültige Auswahl", "Bitte wähle alles aus.");
+                    return null;
+                }
+                if (currentPlayer.getResourceCount(give) < 1) {
+                    showError("Nicht genug Ressourcen", "Du hast nicht genug von dieser Ressource.");
+                    return null;
+                }
+                if (partner.getResourceCount(get) < 1) {
+                    showError("Nicht genug Ressourcen", "Der Handelspartner hat nicht genug von der gewünschten Ressource.");
+                    return null;
+                }
+                // Bestätigung beim Partner einholen
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Handelsangebot");
+                confirm.setHeaderText(partner.getName() + ", möchtest du diesen Handel annehmen?");
+                confirm.setContentText(
+                    currentPlayer.getName() + " bietet: " + give.getGermanName() +
+                    " gegen " + get.getGermanName()
+                );
+                java.util.Optional<ButtonType> result = confirm.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // Handel durchführen
+                    gameState.tradeResources(currentPlayer, partner, give, get);
+                    showInfo("Handel erfolgreich", "Der Handel wurde durchgeführt.");
+                    updateDisplay();
+                    notifyAction();
+                } else {
+                    showInfo("Handel abgelehnt", partner.getName() + " hat den Handel abgelehnt.");
+                }
+            }
+            return null;
+        });
+        dialog.showAndWait();
     }
 } 
