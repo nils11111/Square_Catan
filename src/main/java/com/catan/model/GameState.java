@@ -155,6 +155,9 @@ public class GameState {
             diceRoll = (int) (Math.random() * 6) + (int) (Math.random() * 6) + 2; // 2-12
             System.out.println("Würfel: " + diceRoll);
             produceResources();
+            
+            // Nach dem Würfeln zum nächsten Spieler wechseln
+            nextPlayer();
         }
     }
 
