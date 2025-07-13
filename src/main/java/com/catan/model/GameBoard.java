@@ -103,10 +103,21 @@ public class GameBoard {
 
     private List<Integer> createNumberDistribution() {
         List<Integer> numbers = new ArrayList<>();
-        
-        // Based on original Catan number distribution (18 numbers, desert gets none)
-        numbers.addAll(Arrays.asList(2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12));
-        
+        // Für 36 Felder (1 Wüste ohne Zahl): 35 Zahlen verteilen
+        // Verteilung: 2, 12 je 2x; 3, 4, 5, 6, 8, 9, 10, 11 je 4x; 7 nicht (Räuber)
+        numbers.addAll(Collections.nCopies(2, 2));
+        numbers.addAll(Collections.nCopies(2, 12));
+        numbers.addAll(Collections.nCopies(4, 3));
+        numbers.addAll(Collections.nCopies(4, 4));
+        numbers.addAll(Collections.nCopies(4, 5));
+        numbers.addAll(Collections.nCopies(4, 6));
+        numbers.addAll(Collections.nCopies(4, 8));
+        numbers.addAll(Collections.nCopies(4, 9));
+        numbers.addAll(Collections.nCopies(4, 10));
+        numbers.addAll(Collections.nCopies(4, 11));
+        // Ergibt 36 Zahlen, aber eine Wüste bekommt keine Zahl, daher eine Zahl entfernen:
+        // Entferne eine 3 (z.B.)
+        numbers.remove(Integer.valueOf(3));
         return numbers;
     }
 
