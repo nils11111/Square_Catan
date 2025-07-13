@@ -2,9 +2,12 @@ package com.catan.ui;
 
 import com.catan.model.*;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
@@ -66,6 +69,46 @@ public class GameBoardView extends GridPane {
                 }
             }
         }
+        
+        // Add legend
+        addLegend();
+    }
+    
+    private void addLegend() {
+        VBox legend = new VBox(5);
+        legend.setPadding(new Insets(10));
+        legend.setStyle("-fx-background-color: white; -fx-border-color: #ccc; -fx-border-width: 1;");
+        
+        Label title = new Label("Ressourcen-Legende");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        legend.getChildren().add(title);
+        
+        // Add legend items
+        addLegendItem(legend, "Wald", Color.FORESTGREEN, "Holz");
+        addLegendItem(legend, "Hügel", Color.SADDLEBROWN, "Lehm");
+        addLegendItem(legend, "Berge", Color.GRAY, "Erz");
+        addLegendItem(legend, "Felder", Color.GOLD, "Getreide");
+        addLegendItem(legend, "Weide", Color.LIGHTGREEN, "Wolle");
+        addLegendItem(legend, "Wüste", Color.SANDYBROWN, "Keine Ressource");
+        
+        // Add to the right side of the board
+        add(legend, gameBoard.getCols() * 2, 0, 1, gameBoard.getRows() * 2);
+    }
+    
+    private void addLegendItem(VBox legend, String terrainName, Color color, String resource) {
+        HBox item = new HBox(10);
+        item.setAlignment(Pos.CENTER_LEFT);
+        
+        Rectangle colorBox = new Rectangle(20, 20);
+        colorBox.setFill(color);
+        colorBox.setStroke(Color.BLACK);
+        colorBox.setStrokeWidth(1);
+        
+        Label label = new Label(terrainName + " → " + resource);
+        label.setFont(Font.font("Arial", 12));
+        
+        item.getChildren().addAll(colorBox, label);
+        legend.getChildren().add(item);
     }
 
     public void setOnAction(Runnable onAction) {
@@ -87,41 +130,35 @@ public class GameBoardView extends GridPane {
         private final int col;
         private final Rectangle background;
         private final Label numberLabel;
-        private final Label terrainLabel;
 
         public TileView(GameBoard.Tile tile, int row, int col) {
             this.tile = tile;
             this.row = row;
             this.col = col;
             
-            // Create background rectangle
-            this.background = new Rectangle(80, 80);
+            // Create background rectangle - größer
+            this.background = new Rectangle(120, 120);
             background.setStroke(Color.BLACK);
             background.setStrokeWidth(2);
             
             if (tile == null) {
                 // Empty field: just gray background, no labels, no click
-                this.terrainLabel = null;
                 this.numberLabel = null;
                 background.setFill(Color.LIGHTGRAY);
                 getChildren().add(background);
                 setDisable(true);
                 return;
             }
-            // Create terrain label
-            this.terrainLabel = new Label(tile.getTerrainType().getEmoji());
-            terrainLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-            
-            // Create number label
+            // Create number label - größer
             this.numberLabel = new Label();
             if (tile.getNumber() != null) {
                 numberLabel.setText(String.valueOf(tile.getNumber()));
-                numberLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+                numberLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
                 numberLabel.setTextFill(getNumberColor(tile.getNumber()));
             }
             
-            // Setup layout
-            getChildren().addAll(background, terrainLabel, numberLabel);
+            // Setup layout - nur Hintergrund und Nummer
+            getChildren().addAll(background, numberLabel);
             setBackgroundColor();
             
             // Add click handler
@@ -172,15 +209,15 @@ public class GameBoardView extends GridPane {
             this.row = row;
             this.col = col;
             
-            // Create circle for vertex
-            this.circle = new Circle(8);
+            // Create circle for vertex - größer
+            this.circle = new Circle(15);
             circle.setStroke(Color.BLACK);
-            circle.setStrokeWidth(2);
+            circle.setStrokeWidth(3);
             circle.setFill(Color.TRANSPARENT);
             
-            // Create building label
+            // Create building label - größer
             this.buildingLabel = new Label();
-            buildingLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+            buildingLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
             
             // Setup layout
             getChildren().addAll(circle, buildingLabel);
@@ -215,7 +252,7 @@ public class GameBoardView extends GridPane {
             int playerIndex = gameState.getPlayers().indexOf(player);
             return switch (playerIndex) {
                 case 0 -> Color.RED;
-                case 1 -> Color.BLUE;
+                case 1 -> Color.rgb(100, 149, 237, 0.7); // Transparentes Blau
                 case 2 -> Color.GREEN;
                 case 3 -> Color.YELLOW;
                 default -> Color.GRAY;
@@ -274,14 +311,14 @@ public class GameBoardView extends GridPane {
             this.col = col;
             this.isHorizontal = isHorizontal;
             
-            // Create line for edge
+            // Create line for edge - größer
             if (isHorizontal) {
-                this.line = new Line(0, 40, 80, 40);
+                this.line = new Line(0, 60, 120, 60);
             } else {
-                this.line = new Line(40, 0, 40, 80);
+                this.line = new Line(60, 0, 60, 120);
             }
             line.setStroke(Color.BLACK);
-            line.setStrokeWidth(3);
+            line.setStrokeWidth(4);
             
             // Setup layout
             getChildren().add(line);
@@ -299,10 +336,10 @@ public class GameBoardView extends GridPane {
             if (edge != null && edge.isOccupied()) {
                 Player owner = edge.getOwner();
                 line.setStroke(getPlayerColor(owner));
-                line.setStrokeWidth(4);
+                line.setStrokeWidth(5);
             } else {
                 line.setStroke(Color.BLACK);
-                line.setStrokeWidth(3);
+                line.setStrokeWidth(4);
             }
         }
 
@@ -310,7 +347,7 @@ public class GameBoardView extends GridPane {
             int playerIndex = gameState.getPlayers().indexOf(player);
             return switch (playerIndex) {
                 case 0 -> Color.RED;
-                case 1 -> Color.BLUE;
+                case 1 -> Color.rgb(100, 149, 237, 0.7); // Transparentes Blau
                 case 2 -> Color.GREEN;
                 case 3 -> Color.YELLOW;
                 default -> Color.GRAY;
